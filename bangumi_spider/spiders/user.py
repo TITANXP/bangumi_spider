@@ -2,9 +2,10 @@ import scrapy
 
 class UserSpider(scrapy.Spider):
     name = 'user'
-    allowed_domains = ['bangumi.tv']
+    allowed_domains = ['bgm.tv']
+    base_url = 'http://bgm.tv'
     # start_usrls解析完成后，会传入parse()方法
-    url_pattern = 'https://bangumi.tv/anime/list/{}/collect'
+    url_pattern = base_url + '/anime/list/{}/collect'
     start_urls = []
     for i in range(1, 600000):
         start_urls.append(url_pattern.format(i))
@@ -40,6 +41,6 @@ class UserSpider(scrapy.Spider):
         # 爬取下一页
         next_page = response.xpath('//div[@class="page_inner"]/a[contains(text(), "››")]/@href').get()
         if next_page:
-            request = scrapy.Request('https://bangumi.tv' + next_page, callback=self.parse_page)
+            request = scrapy.Request(self.base_url + next_page, callback=self.parse_page)
             request.meta['id'] = user['id']
             yield request

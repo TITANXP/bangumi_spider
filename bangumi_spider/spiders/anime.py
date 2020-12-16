@@ -7,9 +7,10 @@ import re
 # 爬取动画
 class AnimeSpider(scrapy.Spider):
     name = 'anime'
-    allowed_domains = ['bangumi.tv']
+    allowed_domains = ['bgm.tv']
+    base_url = 'http://bgm.tv'
     # start_usrls解析完成后，会传入parse()方法
-    start_urls = ['https://bangumi.tv/anime/browser/']
+    start_urls = [base_url+'/anime/browser/']
 
     # 处理动画列表
     def parse(self, response):
@@ -17,11 +18,11 @@ class AnimeSpider(scrapy.Spider):
         next_page = response.xpath('//div[@class="page_inner"]/a[contains(text(), "››")]/@href').get()
         # 将当前页的动画传入 parse_anime()进行处理
         for anime in response.xpath('//ul[@id="browserItemList"]/li/div//a/@href'):
-            anime_url = 'https://bangumi.tv' + anime.get()
+            anime_url = self.base_url + anime.get()
             yield scrapy.Request(anime_url, callback=self.parse_anime)
         # 爬取下一页
         if next_page:
-            next_page_url = 'https://bangumi.tv/anime/browser/' + next_page
+            next_page_url = self.base_url+ '/anime/browser/' + next_page
             yield scrapy.Request(next_page_url, callback=self.parse)
 
     # 处理动画页面
@@ -126,7 +127,7 @@ class AnimeSpider(scrapy.Spider):
         # 爬取下一页用户
         next_page = response.xpath('//div[@class="page_inner"]/a[contains(text(), "››")]/@href').get()
         if next_page:
-            yield scrapy.Request('https://bangumi.tv/' + next_page, callback=self.parse_collect)
+            yield scrapy.Request(self.base_url + next_page, callback=self.parse_collect)
         yield collect_item
 
 
