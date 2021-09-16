@@ -66,9 +66,9 @@ if __name__ == '__main__':
         print(gpu)
         tf.config.experimental.set_memory_growth(gpu, True)
     # 训练数据集路径
-    train_samples_file_path = r"D:\python_project\bangumi_spider\bangumi_spider\tools\trainSample1.csv"
+    train_samples_file_path = r"/bangumi_spider/tools/trainSample1.csv"
     # 测试数据集路径
-    test_samples_file_path = r"D:\python_project\bangumi_spider\bangumi_spider\tools\testSample1.csv"
+    test_samples_file_path = r"/bangumi_spider/tools/testSample1.csv"
     # 加载数据
     train_dataset = get_dataset(train_samples_file_path)
     test_dataset = get_dataset(test_samples_file_path)
@@ -160,7 +160,7 @@ if __name__ == '__main__':
         metrics=['accuracy', tf.keras.metrics.AUC(curve='ROC'), tf.keras.metrics.AUC(curve='PR')]
     )
 
-    log_dir = os.path.join('tensorboardlog')
+    log_dir = os.path.join('../bangumi_spider/tools/tensorboardlog')
     tensorboard = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
     print(log_dir)
     # 训练模型

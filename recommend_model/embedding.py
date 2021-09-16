@@ -113,14 +113,14 @@ if __name__ == '__main__':
     collect_sequences = parse_usercollect_to_sequences(user_collects)
     model = train_model(collect_sequences)
     # 保存embedding向量
-    # model.wv.save_word2vec_format('emb.csv')
+    # recommend_model.wv.save_word2vec_format('emb.csv')
     anime_embs = collections.defaultdict(None)
     for i in model.wv.key_to_index:
         anime_embs[i] = model.wv.get_vector(i)
-    save_as_csv(anime_embs, 'animeEmb.csv')
+    save_as_csv(anime_embs, '../bangumi_spider/animeEmb.csv')
     # 计算用户Embedding
     user_embs = get_user_emb(user_collects,anime_embs)
-    save_as_csv(user_embs, 'userEmb.csv')
+    save_as_csv(user_embs, '../bangumi_spider/userEmb.csv')
     # 写入redis
     save_to_redis(anime_embs, 'animeEmb:')
     save_to_redis(user_embs, 'userEmb:')
